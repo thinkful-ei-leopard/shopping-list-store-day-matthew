@@ -1,3 +1,5 @@
+'use strict';
+
 const store = {
   items: [
     { id: cuid(), name: 'apples', checked: false },
@@ -25,6 +27,9 @@ const generateItemElement = function (item) {
         </button>
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
+        </button>
+        <button class='shopping-item-rename js-item-rename'>
+          <span class='button-label'>rename</span>
         </button>
       </div>
     </li>`;
@@ -85,6 +90,20 @@ const handleItemCheckClicked = function () {
   $('.js-shopping-list').on('click', '.js-item-toggle', event => {
     const id = getItemIdFromElement(event.currentTarget);
     toggleCheckedForListItem(id);
+    render();
+  });
+};
+
+const renameItem = function (id) {
+  const foundItem = store.items.find(item => item.id === id);
+  let newName = prompt('What should we rename this item to?');
+  foundItem.name = newName;
+};
+
+const handleItemRenameClicked = function() {
+  $('.js-shopping-list').on('click', '.js-item-rename', event => {
+    const id = getItemIdFromElement(event.currentTarget);
+    renameItem(id);
     render();
   });
 };
@@ -158,6 +177,7 @@ const handleShoppingList = function () {
   render();
   handleNewItemSubmit();
   handleItemCheckClicked();
+  handleItemRenameClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
 };
